@@ -3,27 +3,139 @@ pipeline {
 
     stages {
 
-        stage('Clone') {
+        stage('System Debug') {
             steps {
-                echo 'Code Cloned'
+                sh '''
+                    echo "===== USER ====="
+                    whoami
+
+                    echo "===== CURRENT PATH ====="
+                    pwd
+
+                    echo "===== FILES ====="
+                    ls -la
+
+                    echo "===== DOCKER VERSION ====="
+                    docker --version || true
+
+                    echo "===== DOCKER COMPOSE VERSION ====="
+                    docker compose version || docker-compose --version || true
+
+                    echo "===== NODE VERSION ====="
+                    node --version || true
+
+                    echo "===== NPM VERSION ====="
+                    npm --version || true
+                '''
             }
         }
 
-        stage('Build Backend') {
+        stage('Project Structure') {
             steps {
+<<<<<<< HEAD
                 dir('backend') {
                     sh 'npm install'
 
                 }
+=======
+                sh '''
+                    echo "===== PROJECT STRUCTURE ====="
+                    find . -maxdepth 3
+
+                    echo "===== ROOT FILES ====="
+                    ls
+
+                    echo "===== FRONTEND ====="
+                    ls -la frontend || true
+
+                    echo "===== BACKEND ====="
+                    ls -la backend || true
+                '''
+>>>>>>> b1d71cc (debug jenkins)
             }
         }
 
-        stage('Build Frontend') {
+        stage('Package Check') {
             steps {
-                dir('frontend') {
-                    sh 'npm install'
-                }
+                sh '''
+                    echo "===== FRONTEND PACKAGE.JSON ====="
+                    cat frontend/package.json || true
+
+                    echo "===== BACKEND PACKAGE.JSON ====="
+                    cat backend/package.json || true
+                '''
+            }
+        }
+
+        stage('Docker Cleanup') {
+            steps {
+                sh '''
+                    docker compose down || true
+                    docker-compose down || true
+                '''
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh '''
+                    echo "===== DOCKER BUILD START ====="
+
+                    docker compose build --no-cache || docker-compose build --no-cache
+                '''
+            }
+        }
+
+        stage('Docker Up') {
+            steps {
+                sh '''
+                    echo "===== STARTING CONTAINERS ====="
+
+                    docker compose up -d || docker-compose up -d
+                '''
+            }
+        }
+
+        stage('Container Status') {
+            steps {
+                sh '''
+                    echo "===== RUNNING CONTAINERS ====="
+                    docker ps -a
+
+                    echo "===== DOCKER IMAGES ====="
+                    docker images
+                '''
+            }
+        }
+
+        stage('Container Logs') {
+            steps {
+                sh '''
+                    echo "===== CONTAINER LOGS ====="
+
+                    docker compose logs --tail=100 || docker-compose logs --tail=100
+                '''
             }
         }
     }
+<<<<<<< HEAD
 }
+=======
+
+    post {
+        always {
+            sh '''
+                echo "===== FINAL DOCKER STATUS ====="
+                docker ps -a || true
+            '''
+        }
+
+        failure {
+            sh '''
+                echo "===== BUILD FAILED ====="
+                docker compose logs || docker-compose logs || true
+            '''
+        }
+    }
+}
+>>>>>>> b1d71cc (debug jenkins)
