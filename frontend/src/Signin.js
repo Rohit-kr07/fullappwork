@@ -32,7 +32,7 @@ function Signin() {
   return (
     <div className="signin-container">
       <div className="signin-card">
-        <h2>Sign In</h2>
+        <h2>Sign In IN </h2>
 
         <form onSubmit={handleSubmit}>
           <label>Email:</label>
