@@ -2,18 +2,26 @@ pipeline {
     agent any
 
     stages {
-        stage('Docker Check') {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Docker Compose Build') {
             steps {
                 bat '''
-                    docker --version
-                    docker info
+                    docker compose build --no-cache
                 '''
             }
         }
 
-        stage('Docker Build') {
+        stage('Docker Compose Up') {
             steps {
-                bat 'docker build -t my-app .'
+                bat '''
+                    docker compose up -d
+                '''
             }
         }
     }
