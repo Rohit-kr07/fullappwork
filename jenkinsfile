@@ -29,14 +29,39 @@ pipeline {
 
 
     post {
-        success {
-            echo 'Deployment Successful'
-        }
 
-        failure {
-            echo 'Deployment Failed'
-        }
+    success {
+        emailext(
+            subject: "Docker Deployment Successful",
+            body: """
+            Login And Signup Application deployed successfully.
+
+            Status: SUCCESS
+            Project: Login And Signup Application
+            """,
+            to: "rk2986761@gmail.com"
+        )
+
+        echo 'Deployment Successful'
     }
+
+    failure {
+        emailext(
+            attachLog: true,
+            subject: "Docker Deployment Failed",
+            body: """
+            Login And Signup Application deployment failed.
+
+            Status: FAILED
+
+            Please check Jenkins console logs.
+            """,
+            to: "rk2986761@gmail.com"
+        )
+
+        echo 'Deployment Failed'
+    }
+}
 }
     
 
