@@ -2,21 +2,18 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
+        stage('Docker Check') {
             steps {
-                checkout scm
+                bat '''
+                    docker --version
+                    docker info
+                '''
             }
         }
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t my-app .'
-            }
-        }
-
-        stage('Docker Run') {
-            steps {
-                sh 'docker run -d -p 3000:3000 my-app'
+                bat 'docker build -t my-app .'
             }
         }
     }
