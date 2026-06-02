@@ -3,74 +3,74 @@ pipeline {
 
     stages {
 
-        stage('System Debug') {
-            steps {
-                sh '''
-                    echo "===== USER ====="
-                    whoami
+        // stage('System Debug') {
+        //     steps {
+        //         sh '''
+        //             echo "===== USER ====="
+        //             whoami
 
-                    echo "===== CURRENT PATH ====="
-                    pwd
+        //             echo "===== CURRENT PATH ====="
+        //             pwd
 
-                    echo "===== FILES ====="
-                    ls -la
+        //             echo "===== FILES ====="
+        //             ls -la
 
-                    echo "===== DOCKER VERSION ====="
-                    docker --version || true
+        //             echo "===== DOCKER VERSION ====="
+        //             docker --version || true
 
-                    echo "===== DOCKER COMPOSE VERSION ====="
-                    docker compose version || docker-compose --version || true
+        //             echo "===== DOCKER COMPOSE VERSION ====="
+        //             docker compose version || docker-compose --version || true
 
-                    echo "===== NODE VERSION ====="
-                    node --version || true
+        //             echo "===== NODE VERSION ====="
+        //             node --version || true
 
-                    echo "===== NPM VERSION ====="
-                    npm --version || true
-                '''
-            }
-        }
+        //             echo "===== NPM VERSION ====="
+        //             npm --version || true
+        //         '''
+        //     }
+        // }
 
-        stage('Project Structure') {
-            steps {
-                sh '''
-                    echo "===== PROJECT STRUCTURE ====="
-                    find . -maxdepth 3
+        // stage('Project Structure') {
+        //     steps {
+        //         sh '''
+        //             echo "===== PROJECT STRUCTURE ====="
+        //             find . -maxdepth 3
 
-                    echo "===== ROOT FILES ====="
-                    ls -la
+        //             echo "===== ROOT FILES ====="
+        //             ls -la
 
-                    echo "===== FRONTEND ====="
-                    ls -la frontend || true
+        //             echo "===== FRONTEND ====="
+        //             ls -la frontend || true
 
-                    echo "===== BACKEND ====="
-                    ls -la backend || true
-                '''
+        //             echo "===== BACKEND ====="
+        //             ls -la backend || true
+        //         '''
 
-                dir('backend') {
-                    sh 'npm install'
-                }
-            }
-        }
+        //         dir('backend') {
+        //             sh 'npm install'
+        //         }
+        //     }
+        // }
 
-        stage('Package Check') {
-            steps {
-                sh '''
-                    echo "===== FRONTEND PACKAGE.JSON ====="
-                    cat frontend/package.json || true
+        // stage('Package Check') {
+        //     steps {
+        //         sh '''
+        //             echo "===== FRONTEND PACKAGE.JSON ====="
+        //             cat frontend/package.json || true
 
-                    echo "===== BACKEND PACKAGE.JSON ====="
-                    cat backend/package.json || true
-                '''
-            }
-        }
+        //             echo "===== BACKEND PACKAGE.JSON ====="
+        //             cat backend/package.json || true
+        //         '''
+        //     }
+        // }
 
-        stage('Docker Cleanup') {
-            steps {
-                sh '''
-                    docker compose down || docker-compose down || true
-                '''
-            }
-        }
+        // stage('Docker Cleanup') {
+        //     steps {
+        //         sh '''
+        //             docker compose down || docker-compose down || true
+        //         '''
+        //     }
+        // }
 
         stage('Docker Build') {
             steps {
@@ -112,19 +112,19 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            sh '''
-                echo "===== FINAL DOCKER STATUS ====="
-                docker ps -a || true
-            '''
-        }
+    // post {
+    //     always {
+    //         sh '''
+    //             echo "===== FINAL DOCKER STATUS ====="
+    //             docker ps -a || true
+    //         '''
+    //     }
 
-        failure {
-            sh '''
-                echo "===== BUILD FAILED ====="
-                docker compose logs || docker-compose logs || true
-            '''
-        }
-    }
+    //     failure {
+    //         sh '''
+    //             echo "===== BUILD FAILED ====="
+    //             docker compose logs || docker-compose logs || true
+    //         '''
+    //     }
+    // }
 }
