@@ -22,7 +22,23 @@ pipeline {
                 bat '''
                     docker compose up -d
                 '''
+                
             }
         }
     }
+
+
+    post {
+        success {
+            echo 'Deployment Successful'
+        }
+
+        failure {
+            echo 'Deployment Failed'
+        }
+    }
 }
+    
+
+
+
