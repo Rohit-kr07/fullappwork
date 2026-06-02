@@ -32,18 +32,12 @@ pipeline {
 
         stage('Project Structure') {
             steps {
-<<<<<<< HEAD
-                dir('backend') {
-                    sh 'npm install'
-
-                }
-=======
                 sh '''
                     echo "===== PROJECT STRUCTURE ====="
                     find . -maxdepth 3
 
                     echo "===== ROOT FILES ====="
-                    ls
+                    ls -la
 
                     echo "===== FRONTEND ====="
                     ls -la frontend || true
@@ -51,7 +45,10 @@ pipeline {
                     echo "===== BACKEND ====="
                     ls -la backend || true
                 '''
->>>>>>> b1d71cc (debug jenkins)
+
+                dir('backend') {
+                    sh 'npm install'
+                }
             }
         }
 
@@ -70,8 +67,7 @@ pipeline {
         stage('Docker Cleanup') {
             steps {
                 sh '''
-                    docker compose down || true
-                    docker-compose down || true
+                    docker compose down || docker-compose down || true
                 '''
             }
         }
@@ -80,7 +76,6 @@ pipeline {
             steps {
                 sh '''
                     echo "===== DOCKER BUILD START ====="
-
                     docker compose build --no-cache || docker-compose build --no-cache
                 '''
             }
@@ -90,7 +85,6 @@ pipeline {
             steps {
                 sh '''
                     echo "===== STARTING CONTAINERS ====="
-
                     docker compose up -d || docker-compose up -d
                 '''
             }
@@ -112,15 +106,11 @@ pipeline {
             steps {
                 sh '''
                     echo "===== CONTAINER LOGS ====="
-
                     docker compose logs --tail=100 || docker-compose logs --tail=100
                 '''
             }
         }
     }
-<<<<<<< HEAD
-}
-=======
 
     post {
         always {
@@ -138,4 +128,3 @@ pipeline {
         }
     }
 }
->>>>>>> b1d71cc (debug jenkins)
