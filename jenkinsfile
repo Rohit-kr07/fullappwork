@@ -2,9 +2,32 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello') {
+        stage('System Info') {
             steps {
-                echo 'Hello World!'
+                sh '''
+                    echo "Current User:"
+                    whoami
+
+                    echo "Current Directory:"
+                    pwd
+
+                    echo "Files:"
+                    ls -la
+                '''
+            }
+        }
+
+        stage('Docker Check') {
+            steps {
+                sh '''
+                    docker --version || true
+                '''
+            }
+        }
+
+        stage('Done') {
+            steps {
+                echo 'Pipeline completed successfully!'
             }
         }
     }
