@@ -2,32 +2,21 @@ pipeline {
     agent any
 
     stages {
-        stage('System Info') {
+        stage('Checkout') {
             steps {
-                sh '''
-                    echo "Current User:"
-                    whoami
-
-                    echo "Current Directory:"
-                    pwd
-
-                    echo "Files:"
-                    ls -la
-                '''
+                checkout scm
             }
         }
 
-        stage('Docker Check') {
+        stage('Docker Build') {
             steps {
-                sh '''
-                    docker --version || true
-                '''
+                sh 'docker build -t my-app .'
             }
         }
 
-        stage('Done') {
+        stage('Docker Run') {
             steps {
-                echo 'Pipeline completed successfully!'
+                sh 'docker run -d -p 3000:3000 my-app'
             }
         }
     }
