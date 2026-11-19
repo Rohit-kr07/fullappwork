@@ -3,6 +3,8 @@ import { useState } from "react";
 import axios from "axios";
 import "./Signin.css";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,7 +14,7 @@ function Signin() {
     e.preventDefault();
 
     axios
-      .post("http://localhost:5000/signin", { email, password })
+      .post(`${API_URL}/signin`, { email, password })
       .then((result) => {
         console.log(result.data);
 

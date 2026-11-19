@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Signup.css";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,7 +15,7 @@ function Signup() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/register", {
+      .post(`${API_URL}/register`, {
         name,
         email,
         password,
